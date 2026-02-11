@@ -12,14 +12,14 @@ export const metadata: Metadata = {
 function MineralBar({ label, value, max }: { label: string; value: number; max: number }) {
   const percentage = Math.min((value / max) * 100, 100);
   return (
-    <div className="space-y-1">
+    <div className="space-y-2">
       <div className="flex justify-between text-sm">
-        <span className="text-text-muted">{label}</span>
+        <span className="text-text-muted font-body">{label}</span>
         <span className="font-medium text-text">{value} mg/L</span>
       </div>
-      <div className="h-1.5 bg-border rounded-full overflow-hidden">
+      <div className="h-px bg-border overflow-hidden">
         <div
-          className="h-full bg-primary rounded-full transition-all"
+          className="h-full bg-text transition-all"
           style={{ width: `${percentage}%` }}
         />
       </div>
@@ -34,10 +34,10 @@ export default function ProductsPage() {
   return (
     <>
       {/* Glass Collection */}
-      <section id="glass" className="py-24 lg:py-32">
+      <section id="glass" className="py-32 lg:py-40">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            <div className="aspect-[3/4] relative bg-secondary/30 rounded-lg overflow-hidden order-2 lg:order-1">
+            <div className="aspect-[3/4] relative overflow-hidden order-2 lg:order-1">
               <Image
                 src="/images/glass-bottle.jpg"
                 alt="Blu glass bottle"
@@ -46,45 +46,45 @@ export default function ProductsPage() {
               />
             </div>
             <div className="order-1 lg:order-2">
-              <p className="text-sm font-medium tracking-widest uppercase text-accent mb-4">
+              <p className="text-xs tracking-[0.2em] uppercase text-accent mb-6">
                 Glass Collection
               </p>
-              <h1 className="text-3xl md:text-4xl font-light text-text tracking-tight">
+              <h1 className="text-4xl md:text-5xl font-light text-text tracking-tight font-heading">
                 {glass.name}
               </h1>
-              <p className="mt-2 text-text-muted">
+              <p className="mt-3 text-text-muted italic font-heading">
                 {glass.sizes.map((s) => s.volume).join(" · ")}
               </p>
-              <p className="mt-6 text-text-muted leading-relaxed">
+              <p className="mt-8 text-text-muted leading-relaxed">
                 Designed for luxury hospitality and tableside service. Our glass
                 collection delivers an uncompromised tasting experience in a bottle
                 worthy of the world&apos;s finest venues.
               </p>
 
-              <div className="mt-8">
-                <h3 className="text-sm font-semibold tracking-wider uppercase text-text mb-4">
+              <div className="mt-10">
+                <h3 className="text-xs tracking-[0.2em] uppercase text-text mb-5">
                   Tasting Notes
                 </h3>
-                <ul className="space-y-2">
+                <ul className="space-y-3">
                   {glass.tastingNotes.map((note) => (
                     <li key={note} className="flex items-center gap-3 text-sm text-text-muted">
-                      <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                      <span className="w-4 h-px bg-text" />
                       {note}
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="mt-8 flex gap-4">
+              <div className="mt-10 flex gap-6">
                 <Link
                   href="/trade#samples"
-                  className="inline-flex items-center px-6 py-2.5 text-sm font-medium text-white bg-primary hover:bg-primary-light rounded transition-colors"
+                  className="inline-flex items-center px-8 py-3 text-sm tracking-wide uppercase bg-text text-white hover:opacity-80 transition-opacity"
                 >
                   Request Samples
                 </Link>
                 <Link
                   href={glass.specSheetUrl}
-                  className="inline-flex items-center px-6 py-2.5 text-sm font-medium text-primary border border-primary hover:bg-primary hover:text-white rounded transition-colors"
+                  className="inline-flex items-center px-8 py-3 text-sm tracking-wide uppercase border border-text text-text hover:bg-text hover:text-white transition-colors"
                 >
                   Spec Sheet (PDF)
                 </Link>
@@ -94,56 +94,61 @@ export default function ProductsPage() {
         </div>
       </section>
 
+      {/* Divider */}
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="border-t border-border" />
+      </div>
+
       {/* PET Collection */}
-      <section id="pet" className="py-24 lg:py-32 bg-background-alt">
+      <section id="pet" className="py-32 lg:py-40">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div>
-              <p className="text-sm font-medium tracking-widest uppercase text-accent mb-4">
+              <p className="text-xs tracking-[0.2em] uppercase text-accent mb-6">
                 PET Collection
               </p>
-              <h2 className="text-3xl md:text-4xl font-light text-text tracking-tight">
+              <h2 className="text-4xl md:text-5xl font-light text-text tracking-tight font-heading">
                 {pet.name}
               </h2>
-              <p className="mt-2 text-text-muted">
+              <p className="mt-3 text-text-muted italic font-heading">
                 {pet.sizes.map((s) => s.volume).join(" · ")}
               </p>
-              <p className="mt-6 text-text-muted leading-relaxed">
+              <p className="mt-8 text-text-muted leading-relaxed">
                 Premium hydration for everyday moments. Our PET collection makes
                 artesian quality accessible for retail distribution and on-the-go
                 consumption without compromise.
               </p>
 
-              <div className="mt-8">
-                <h3 className="text-sm font-semibold tracking-wider uppercase text-text mb-4">
+              <div className="mt-10">
+                <h3 className="text-xs tracking-[0.2em] uppercase text-text mb-5">
                   Tasting Notes
                 </h3>
-                <ul className="space-y-2">
+                <ul className="space-y-3">
                   {pet.tastingNotes.map((note) => (
                     <li key={note} className="flex items-center gap-3 text-sm text-text-muted">
-                      <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                      <span className="w-4 h-px bg-text" />
                       {note}
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="mt-8 flex gap-4">
+              <div className="mt-10 flex gap-6">
                 <Link
                   href="/trade#samples"
-                  className="inline-flex items-center px-6 py-2.5 text-sm font-medium text-white bg-primary hover:bg-primary-light rounded transition-colors"
+                  className="inline-flex items-center px-8 py-3 text-sm tracking-wide uppercase bg-text text-white hover:opacity-80 transition-opacity"
                 >
                   Request Samples
                 </Link>
                 <Link
                   href={pet.specSheetUrl}
-                  className="inline-flex items-center px-6 py-2.5 text-sm font-medium text-primary border border-primary hover:bg-primary hover:text-white rounded transition-colors"
+                  className="inline-flex items-center px-8 py-3 text-sm tracking-wide uppercase border border-text text-text hover:bg-text hover:text-white transition-colors"
                 >
                   Spec Sheet (PDF)
                 </Link>
               </div>
             </div>
-            <div className="aspect-[3/4] relative bg-secondary/30 rounded-lg overflow-hidden">
+            <div className="aspect-[3/4] relative overflow-hidden">
               <Image
                 src="/images/pet-bottle.jpg"
                 alt="Blu PET bottle on the beach"
@@ -155,35 +160,43 @@ export default function ProductsPage() {
         </div>
       </section>
 
+      {/* Divider */}
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="border-t border-border" />
+      </div>
+
       {/* Mineral Profile */}
-      <section id="mineral-profile" className="py-24 lg:py-32">
+      <section id="mineral-profile" className="py-32 lg:py-40">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-light text-text tracking-tight">
+          <div className="text-center max-w-2xl mx-auto mb-20">
+            <p className="text-xs tracking-[0.2em] uppercase text-accent mb-6">
+              Analysis
+            </p>
+            <h2 className="text-4xl md:text-5xl font-light text-text tracking-tight font-heading">
               Mineral Profile
             </h2>
-            <p className="mt-4 text-text-muted">
+            <p className="mt-6 text-text-muted leading-relaxed">
               Naturally occurring minerals from artesian springs deep beneath the Costa Rican rainforest.
             </p>
           </div>
 
           <div className="max-w-2xl mx-auto">
             {/* pH and TDS highlights */}
-            <div className="grid grid-cols-2 gap-6 mb-12">
-              <div className="text-center p-6 bg-secondary/30 rounded-lg">
-                <p className="text-4xl font-light text-primary">{glass.mineralProfile.ph}</p>
-                <p className="mt-1 text-sm text-text-muted">pH Level</p>
-                <p className="mt-1 text-xs text-accent font-medium">Naturally Alkaline</p>
+            <div className="grid grid-cols-2 gap-px bg-border mb-16">
+              <div className="text-center py-10 px-6 bg-white">
+                <p className="text-5xl font-light text-text font-heading">{glass.mineralProfile.ph}</p>
+                <p className="mt-2 text-xs tracking-[0.2em] uppercase text-text-muted">pH Level</p>
+                <p className="mt-1 text-sm italic font-heading text-accent">Naturally Alkaline</p>
               </div>
-              <div className="text-center p-6 bg-secondary/30 rounded-lg">
-                <p className="text-4xl font-light text-primary">{glass.mineralProfile.tds}</p>
-                <p className="mt-1 text-sm text-text-muted">TDS (mg/L)</p>
-                <p className="mt-1 text-xs text-accent font-medium">Total Dissolved Solids</p>
+              <div className="text-center py-10 px-6 bg-white">
+                <p className="text-5xl font-light text-text font-heading">{glass.mineralProfile.tds}</p>
+                <p className="mt-2 text-xs tracking-[0.2em] uppercase text-text-muted">TDS (mg/L)</p>
+                <p className="mt-1 text-sm italic font-heading text-accent">Total Dissolved Solids</p>
               </div>
             </div>
 
             {/* Mineral bars */}
-            <div className="space-y-5">
+            <div className="space-y-6">
               <MineralBar label="Calcium (Ca)" value={glass.mineralProfile.calcium} max={100} />
               <MineralBar label="Magnesium (Mg)" value={glass.mineralProfile.magnesium} max={50} />
               <MineralBar label="Sodium (Na)" value={glass.mineralProfile.sodium} max={50} />
