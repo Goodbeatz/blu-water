@@ -1,23 +1,27 @@
 # Blu Water Website — Session Status
 
 **Date:** February 11, 2026
-**Session focus:** Deployment to GitHub + Vercel, password protection
+**Session focus:** V2 editorial redesign (`design-v2` branch) + handoff
 
 ---
 
 ## Current State
 
-The website is **built and deployed**. All pages render, navigation works, forms are present. However, the backend services (Supabase database, Resend email) have not been verified end-to-end — form submissions will likely fail until Supabase tables are created and Resend domain is verified.
+Two fully built versions of the site exist on separate branches:
 
-**What works:**
+**V1 (`main` branch):** Deployed to Vercel. Warm blue/gold design. All pages render, password protection active.
+
+**V2 (`design-v2` branch):** Built and pushed to GitHub. Monochrome editorial design inspired by VOSS Water. All 16 restyled files build with zero errors. Needs its own Vercel project to deploy.
+
+**What works (both branches):**
 - All 10 pages render (home, products, source, quality, trade, investors, sustainability, contact, privacy, terms)
 - Navigation (desktop + mobile hamburger menu)
 - Responsive layout across breakpoints
 - Password protection via HTTP Basic Auth (Bluteam / GO!)
-- Deployed to Vercel with auto-deploy on push to `main`
+- `npm run build` passes with zero errors on both branches
 - GitHub repo at https://github.com/Goodbeatz/blu-water
 
-**What doesn't work (yet):**
+**What doesn't work (yet, both branches):**
 - Form submissions — Supabase tables have not been created, so all 4 form POSTs will return 500
 - Email notifications — Resend domain (`blu.com`) likely not verified, emails will fail
 - Spec sheet PDF downloads — files don't exist in `public/`
@@ -28,75 +32,79 @@ The website is **built and deployed**. All pages render, navigation works, forms
 
 ## What I Was Working On
 
-This session focused exclusively on **deployment infrastructure**:
-1. Initializing git in the `blu-water/` directory
-2. Creating the GitHub repo (`Goodbeatz/blu-water`)
-3. Getting the user authenticated with GitHub CLI and Vercel
-4. Deploying via Vercel dashboard (importing the GitHub repo)
-5. Adding HTTP Basic Auth password protection (`middleware.ts`)
+This session focused on building **V2 — the editorial redesign**:
+1. Created `design-v2` branch from `main`
+2. Rewrote `globals.css` with monochrome color tokens
+3. Added Playfair Display serif font via `next/font/google` in `layout.tsx`
+4. Restyled `header.tsx` — white bg, minimal nav, removed CTA button
+5. Restyled `footer.tsx` — white bg instead of dark
+6. Completely redesigned `page.tsx` (homepage) with editorial layout
+7. Restyled all 7 content pages (products, source, quality, trade, investors, sustainability, contact)
+8. Restyled all 4 form components (trade, samples, investor, contact)
+9. Verified build passes, pushed to GitHub
+10. Updated handoff files
 
 ---
 
 ## What's Done
 
-1. **Git initialized** — repo created at `blu-water/.git`, branch `main`
-2. **GitHub repo created** — https://github.com/Goodbeatz/blu-water (public)
-3. **GitHub CLI authenticated** — user `Goodbeatz`, git credential helper configured via `gh auth setup-git`
-4. **Pushed to GitHub** — 2 commits on `main`
-5. **Vercel deployment initiated** — user importing repo via Vercel dashboard (vercel.com/new)
-6. **Password protection added** — `middleware.ts` with HTTP Basic Auth, credentials: `Bluteam` / `GO!`
-7. **Environment variables** — user instructed to add 4 env vars in Vercel dashboard
+1. **V2 branch created** — `design-v2` branched from `main`, pushed to GitHub
+2. **Design tokens overhauled** — `globals.css` switched from blue/gold to monochrome (#111111 primary, #FFFFFF background, #777777 muted)
+3. **Serif font added** — Playfair Display loaded via `next/font/google`, applied to all headings via `--font-heading` CSS variable
+4. **Header restyled** — White background, `tracking-[0.3em]` logo, 6 nav items (Products, Source, Quality, Trade, Investors, Contact), removed "Request Samples" button
+5. **Footer restyled** — White background with `border-t border-border` instead of dark `bg-primary`
+6. **Homepage redesigned** — Split hero (text left, image right), thin proof strip with line dividers, alternating full-width product blocks, full-bleed source image with overlay, editorial CTAs
+7. **All 7 content pages restyled** — White backgrounds replacing blue, serif headings, editorial label patterns (`text-xs tracking-[0.2em] uppercase`), subtle borders instead of colored backgrounds
+8. **All 4 forms restyled** — Inputs with `rounded-none px-5 py-3.5`, `ring-1 ring-text/20` focus, uppercase labels, serif success states, dark buttons
+9. **Build verified** — `npm run build` succeeds with zero TypeScript or build errors
+10. **Pushed to GitHub** — `design-v2` branch available at repo
 
 ---
 
 ## What's Not Done
 
-### Immediate (should be next session)
-1. **Create Supabase tables** — Run the SQL from PRD Section 7 in Supabase SQL editor. Tables needed: `trade_applications`, `sample_requests`, `investor_inquiries`, `contact_submissions` with their indexes.
-2. **Verify Resend domain** — Either verify `blu.com` in Resend dashboard, or change the "from" addresses in all 4 API routes to use `onboarding@resend.dev` (Resend's default sender) temporarily.
-3. **Test form submissions end-to-end** — Submit each form, verify DB insert, verify both emails (admin + auto-reply) deliver.
-4. **Verify the Vercel deployment is live** — Confirm the URL works, password prompt appears, site renders correctly.
+### V2 Deployment
+1. **Create second Vercel project** — Import same GitHub repo at vercel.com/new, set branch to `design-v2`. Add the same 4 environment variables. This gives two live URLs for the pitch.
+
+### Backend (applies to both branches)
+2. **Create Supabase tables** — Run the SQL from PRD Section 7 in Supabase SQL editor. Tables: `trade_applications`, `sample_requests`, `investor_inquiries`, `contact_submissions`.
+3. **Verify Resend domain** — Either verify `blu.com` in Resend dashboard or change "from" addresses to `onboarding@resend.dev` temporarily.
+4. **Test form submissions end-to-end** — Submit each form, verify DB insert, verify both emails deliver.
 
 ### Near-term
-5. **Add real product spec sheet PDFs** — Upload to `public/docs/` (referenced in `lib/products.ts`)
-6. **Replace placeholder images** — Current images in `public/images/` may need updating with real brand photography
-7. **Custom domain setup** — Point a domain to Vercel (DNS configuration)
-8. **Rate limiting** — Add Upstash Redis rate limiting to API routes (PRD specifies 5 submissions/IP/day)
-9. **Remove or externalize Basic Auth credentials** — Currently hardcoded in `middleware.ts`
-
-### Post-launch (Phase 2 per PRD)
-10. Instagram feed integration
-11. Google Analytics 4
-12. Blog/news section
-13. SEO optimization (sitemap, robots.txt, structured data)
+5. **Add spec sheet PDFs** — Upload to `public/docs/` (referenced in `lib/products.ts`)
+6. **Replace placeholder images** — Update `public/images/` with real brand photography
+7. **Custom domain setup** — Point a domain to Vercel
+8. **Rate limiting** — Add Upstash Redis rate limiting to API routes (PRD specifies 5/IP/day)
+9. **Externalize Basic Auth credentials** — Currently hardcoded in `middleware.ts`
 
 ---
 
 ## Decisions Made and Why
 
-1. **Public GitHub repo** — Created as public. Can be changed to private later if needed via GitHub settings.
+1. **Same content, different skin approach** — V2 changes only visual styling (CSS tokens, layout, typography). No changes to API routes, lib/, validation schemas, types, product data, middleware, or privacy/terms pages. This ensures both versions share identical backend behavior.
 
-2. **HTTP Basic Auth for password protection** — User requested site-wide password protection with specific credentials (Bluteam / GO!). Used middleware-level Basic Auth because it's the simplest approach that works on Vercel without any external dependencies. Credentials are hardcoded — this is intentional for simplicity but should be moved to env vars if kept long-term.
+2. **Playfair Display for V2 headings** — Chosen for editorial/luxury feel that contrasts with V1's all-Inter approach. Loaded via `next/font/google` to avoid external font requests.
 
-3. **Vercel dashboard deploy instead of CLI** — The Vercel CLI device auth flow kept failing (codes expiring, verification errors). Redirected user to import the GitHub repo directly via vercel.com/new, which is actually the recommended approach anyway and gives auto-deploy on push.
+3. **Monochrome palette** — Near-black (#111111) + pure white (#FFFFFF) + cool grays. Inspired by VOSS Water's editorial aesthetic. No blue or warm tones.
 
-4. **`gh auth setup-git` for push credentials** — Initial `git push` failed because HTTPS auth wasn't configured. Used GitHub CLI's credential helper to solve this.
+4. **Parallel subagent restyling** — Used 3 parallel subagents to restyle the 7 content pages and 4 form components simultaneously, for efficiency.
+
+5. **No changes to privacy/terms pages** — These are already text-focused and minimal. Styling changes cascade through global tokens and heading font changes.
 
 ---
 
 ## Concerns and Uncertainties
 
-1. **Vercel deployment status unknown.** The user said "it's building" and later "it's all done" but I never saw the actual Vercel URL or confirmed the deployment succeeded. The next session should verify the live URL renders correctly.
+1. **V2 not yet deployed.** The `design-v2` branch is pushed to GitHub but the second Vercel project hasn't been created yet. The user needs to do this manually (import repo, select `design-v2` branch, add env vars).
 
-2. **Environment variables may not be set correctly.** The user was instructed to copy values from `.env.local` into Vercel's dashboard. If any were missed or mistyped, API routes will fail at runtime (not at build time).
+2. **Visual testing not done on live.** V2 was verified via `npm run build` (zero errors) but not visually reviewed in a browser during this session. The user should run `npm run dev` on the `design-v2` branch or check the Vercel preview once deployed.
 
-3. **Email "from" addresses are probably invalid.** All routes use `@blu.com` — this domain needs to be verified in Resend. Until it is, all emails will silently fail. This is a critical path item.
+3. **Image aspect ratios may not match V2 layout.** V2 uses different image containers (e.g., `aspect-[3/4]` hero, `aspect-[21/9]` source teaser) compared to V1. The same placeholder images are used — they may not look ideal in the new aspect ratios.
 
-4. **No Supabase tables exist yet.** Every form submission will 500 until the tables are created. This is the highest priority backend task.
+4. **Backend issues from previous session persist.** Supabase tables still not created, Resend domain still not verified. These affect both V1 and V2.
 
-5. **Basic Auth credentials are hardcoded.** The password `GO!` contains a special character (`!`) which could theoretically cause issues with some HTTP Basic Auth implementations, though it works fine in standard browsers. If issues arise, consider simplifying the password.
-
-6. **Next.js 16 vs PRD's specified 15.5.** The installed version is a major version ahead of what the PRD researched. Haven't encountered issues, but worth noting if something behaves unexpectedly.
+5. **Public repo.** The GitHub repo is public. Both design versions are visible to anyone. Consider making it private if this is for a client pitch.
 
 ---
 
@@ -104,12 +112,19 @@ This session focused exclusively on **deployment infrastructure**:
 
 | File | Role |
 |------|------|
-| `blu-water/middleware.ts` | Password protection — Basic Auth for entire site |
-| `blu-water/app/api/trade/apply/route.ts` | Trade account form handler (representative of all 4 API routes) |
-| `blu-water/lib/supabase.ts` | Supabase client singleton — will error if env vars missing |
-| `blu-water/lib/resend.ts` | Resend client singleton |
-| `blu-water/.env.local` | Local environment variables (not committed) |
-| `blu-water/app/globals.css` | Design tokens (colors, fonts) defined in @theme |
-| `blu-water/lib/products.ts` | Product data — references spec sheet PDFs that don't exist yet |
-| `Docs/BLU_WATER_PRD.md` | Full PRD with Supabase SQL, feature specs, all requirements |
-| `docs/handoff/handoff.md` | This handoff protocol |
+| `app/globals.css` | V2 design tokens — monochrome palette, font variables |
+| `app/layout.tsx` | V2 font loading — Playfair Display + Inter via next/font/google |
+| `app/page.tsx` | V2 homepage — completely redesigned editorial layout |
+| `components/layout/header.tsx` | V2 header — white bg, minimal nav |
+| `components/layout/footer.tsx` | V2 footer — white bg, border divider |
+| `app/products/page.tsx` | V2 products — full-bleed images, editorial headings |
+| `app/source/page.tsx` | V2 source — dramatic imagery, serif headings |
+| `app/quality/page.tsx` | V2 quality — subtle borders, editorial cards |
+| `app/trade/page.tsx` | V2 trade — light form backgrounds, editorial labels |
+| `app/investors/page.tsx` | V2 investors — more whitespace, editorial feel |
+| `app/sustainability/page.tsx` | V2 sustainability — numbered pillars, minimal style |
+| `app/contact/page.tsx` | V2 contact — refined sidebar + form |
+| `components/forms/*.tsx` | All 4 forms restyled — sharp inputs, dark buttons |
+| `middleware.ts` | Password protection — unchanged, same on both branches |
+| `docs/handoff/CLAUDE.md` | Project knowledge — updated with V2 architecture |
+| `docs/handoff/handoff.md` | Handoff protocol |

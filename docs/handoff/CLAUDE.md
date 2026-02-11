@@ -4,7 +4,13 @@
 
 Premium artesian water brand website for **Blu** — a Costa Rica-sourced alkaline water company. The site targets distributors, hospitality buyers, investors, and retail buyers. The goal is to project institutional credibility well beyond the company's current size.
 
-Full PRD: `Docs/BLU_WATER_PRD.md`
+**Two design versions exist** to demonstrate range for a website pitch:
+- **V1 (`main` branch):** Warm, blue/gold palette. Story-driven layout. Inter font for everything.
+- **V2 (`design-v2` branch):** Monochrome editorial aesthetic inspired by VOSS Water. Playfair Display serif for headings, Inter for body. White-dominant, more vertical rhythm, full-bleed imagery.
+
+Same content, same backend, same images, same middleware — different visual skin.
+
+Full PRD: `docs/BLU_WATER_PRD.md`
 
 ## Architecture
 
@@ -15,8 +21,9 @@ Full PRD: `Docs/BLU_WATER_PRD.md`
 - **Forms:** React Hook Form 7.71.1 + Zod 4.3.6
 - **Database:** Supabase (PostgreSQL) — server-side only via service role key
 - **Email:** Resend — transactional notifications + auto-replies
-- **Hosting:** Vercel (auto-deploys from GitHub `main` branch)
+- **Hosting:** Vercel (auto-deploys from GitHub). V1 deploys from `main`, V2 should deploy from `design-v2` as a separate Vercel project.
 - **Repo:** https://github.com/Goodbeatz/blu-water
+- **Branches:** `main` (V1), `design-v2` (V2)
 
 ### No shadcn/ui installed
 Despite the PRD recommending shadcn/ui, the project does **not** use it. All components are hand-written with Tailwind utility classes. The only UI utility is `cn()` from `lib/utils.ts` (clsx + tailwind-merge).
@@ -92,10 +99,27 @@ ADMIN_EMAIL                  — Email address for admin notifications
 All set in Vercel dashboard for production. Local dev uses `.env.local`.
 
 ### Styling
-- Custom color tokens defined via Tailwind v4 `@theme` directive in `globals.css`
-- Color names: `primary`, `primary-light`, `secondary`, `accent`, `accent-dark`, `text`, `text-muted`, `background`, `background-alt`, `border`
+
+#### V1 (`main` branch)
+- Blue/gold warm palette defined via Tailwind v4 `@theme` directive in `globals.css`
 - Font: Inter for both headings and body
-- Design philosophy: luxury restraint — whitespace, minimal copy, large imagery
+- Design philosophy: warm, story-driven, blue accents
+
+#### V2 (`design-v2` branch)
+- Monochrome editorial palette in `globals.css`:
+  - `--color-primary`: `#111111` (near-black)
+  - `--color-text-muted`: `#777777` (cool gray)
+  - `--color-background`: `#FFFFFF` (pure white)
+  - `--color-border`: `#E0E0E0` (light gray)
+- Fonts: Playfair Display (serif) for headings via `--font-heading`, Inter for body via `--font-body`
+- Both loaded via `next/font/google` in `layout.tsx`, applied as CSS variables on `<html>`
+- Common editorial patterns:
+  - Section labels: `text-xs tracking-[0.2em] uppercase text-text-muted`
+  - CTA links: underline style with `border-b border-text pb-1`
+  - Buttons: `rounded-none` (sharp corners), `bg-text text-white` or `border border-text`
+  - Sections: tall `py-32 lg:py-40`, separated by `border-t border-border`
+  - Italic accents in headings: `<em className="italic">` for editorial flair
+- Color names shared: `primary`, `primary-light`, `secondary`, `accent`, `accent-dark`, `text`, `text-muted`, `background`, `background-alt`, `border`
 
 ### Password Protection
 `middleware.ts` implements HTTP Basic Auth on all routes except static assets. Credentials are hardcoded: `Bluteam` / `GO!`. This is temporary — intended to be removed or replaced before public launch.
@@ -132,3 +156,6 @@ All set in Vercel dashboard for production. Local dev uses `.env.local`.
 | Honeypot | Hidden form field for spam protection — if filled (by bots), submission is silently accepted but not processed |
 | Service Role Key | Supabase admin-level API key that bypasses Row Level Security — used server-side only |
 | ADMIN_EMAIL | The email address that receives all form submission notifications (set via env var) |
+| V1 / V2 | Two visual designs of the same site. V1 = `main` branch (warm/blue). V2 = `design-v2` branch (monochrome/editorial). Same content and backend. |
+| Editorial Pattern | V2's repeating design motif: uppercase labels, serif headings with italic accents, thin borders, generous whitespace |
+| `--font-heading` / `--font-body` | CSS custom properties set by `next/font/google` in V2. Heading = Playfair Display, Body = Inter. Applied via Tailwind's `font-heading` / `font-body` utilities. |
