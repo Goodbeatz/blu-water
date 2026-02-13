@@ -2,25 +2,26 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const authHeader = request.headers.get("authorization");
-
-  if (authHeader) {
-    const [scheme, encoded] = authHeader.split(" ");
-    if (scheme === "Basic" && encoded) {
-      const decoded = atob(encoded);
-      const [user, pass] = decoded.split(":");
-      if (user === "Bluteam" && pass === "GO!") {
-        return NextResponse.next();
-      }
-    }
+  // Skip auth on local dev — only enforce on Vercel
+  if (!process.env.VERCEL) {
+    return NextResponse.next();
   }
 
-  return new NextResponse("Authentication required", {
-    status: 401,
-    headers: {
-      "WWW-Authenticate": 'Basic realm="Blu Water"',
-    },
-  });
+  // Allow access to the login page and auth API
+  const { pathname } = request.nextUrl;
+  if (pathname === "/login" || pathname === "/api/auth") {
+    return NextResponse.next();
+  }
+
+  // Check for auth cookie
+  const authCookie = request.cookies.get("blu-auth");
+  if (authCookie?.value === "authenticated") {
+    return NextResponse.next();
+  }
+
+  // Redirect to login page
+  const loginUrl = new URL("/login", request.url);
+  return NextResponse.redirect(loginUrl);
 }
 
 export const config = {
